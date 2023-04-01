@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+</head>
+<body>
+    <div id="chatbox"></div>
+    <input type="text" id="message">
+    <button onclick="sendmessage()">Send</button>
+</body>
+<script>
+    const socket = new WebSocket('ws://localhost:8080')
+
+    socket.onmessage = ({data}) => {
+        console.log(data)
+        document.getElementById('chatbox').innerHTML += "<br/>"+data
+    };
+
+    const sendmessage = () => {
+        message = document.getElementById('message').value
+        socket.send(message)
+        document.getElementById('message').value = ''
+    }
+</script>
+</html>
