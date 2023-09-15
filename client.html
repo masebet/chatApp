@@ -10,11 +10,18 @@
     <button onclick="sendmessage()">Send</button>
 </body>
 <script>
-    const socket = new WebSocket('ws://localhost:8080')
+    const socket = new WebSocket('wss://arindana.com:8000/echo')
 
     socket.onmessage = ({data}) => {
         console.log(data)
         document.getElementById('chatbox').innerHTML += "<br/>"+data
+    };
+
+    socket.onclose = function(e) {
+    console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+    setTimeout(function() {
+        location.replace(location.href);
+    }, 1000);
     };
 
     const sendmessage = () => {
@@ -22,5 +29,13 @@
         socket.send(message)
         document.getElementById('message').value = ''
     }
+
+  const inputElement = document.getElementById('message');
+  inputElement.addEventListener('keydown', function(event) {
+  if (event.keyCode === 13 || event.key === 'Enter') {
+    console.log('Enter key was pressed');
+    sendmessage();
+   }
+  });
 </script>
 </html>
